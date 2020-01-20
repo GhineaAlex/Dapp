@@ -7,6 +7,9 @@ contract Election {
 		string name;
 		uint voteCount;
 	}
+
+	//stocarea conturilor care au votat
+	mapping(address => bool) public voters;
 	//constructor
 	//store candidate
 	//fetch candidate
@@ -24,5 +27,15 @@ contract Election {
 	function addCandidate (string memory _name) private {
 		candidatesCount ++;
 		candidates[candidatesCount] = Candidate (candidatesCount, _name, 0);
+	}
+
+	function vote(uint _candidateId) public {
+		//votul sa fie unic de la fiecare adresa
+		//solidity ne ofera posibilitatea de a oferi mai multe argumente, adica metadata mai mult decat candidateId;
+		//pentru a avea votul unic este nevoie sa stim contul care voteaza
+		voters[msg.sender] = true;
+		//referinta catre voters mapping, iar cu msg.sender vedem daca contul respectiv a mai votat vreodata
+		//update candidate vote count; adica posibilitatea de a vota
+		candidates[_candidateId].voteCount ++;
 	}
 }
