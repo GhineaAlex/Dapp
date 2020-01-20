@@ -30,7 +30,15 @@ contract Election {
 	}
 
 	function vote(uint _candidateId) public {
+		//adresa nu a mai votat inainte
+		//luam referinta celor care au votat si fac check daca acest voter a votat inainte; daca nu a votat => false, 
+		//dar cu ! el va merge pe true, deci acel require este satisfacut, deci cel care a votat este unic
+		require(!voters[msg.sender]);
+
 		//votul sa fie unic de la fiecare adresa
+		//votul merge la un candidat valid
+		require(_candidateId > 0 && _candidateId <= candidatesCount);
+
 		//solidity ne ofera posibilitatea de a oferi mai multe argumente, adica metadata mai mult decat candidateId;
 		//pentru a avea votul unic este nevoie sa stim contul care voteaza
 		voters[msg.sender] = true;
