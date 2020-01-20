@@ -18,6 +18,10 @@ contract Election {
 
 	uint public candidatesCount;
 
+	event votedEvent(
+		uint indexed _candidateId
+	);
+
 	constructor () public {
 		//state variable if without _
 		addCandidate('Candidate 1');
@@ -45,5 +49,7 @@ contract Election {
 		//referinta catre voters mapping, iar cu msg.sender vedem daca contul respectiv a mai votat vreodata
 		//update candidate vote count; adica posibilitatea de a vota
 		candidates[_candidateId].voteCount ++;
+
+		emit votedEvent(_candidateId);
 	}
 }

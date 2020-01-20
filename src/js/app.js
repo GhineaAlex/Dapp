@@ -23,10 +23,27 @@ App = {
     $.getJSON("Election.json", function(election){
       //generarea unui contract truffle din artifact
       App.contracts.Election = TruffleContract(election);
-      App.contracts.Election.setProvider(App.web3Provider);
       //conectarea la un provider pentru a interacta cu contractul
+      App.contracts.Election.setProvider(App.web3Provider);
+      
+      App.contracts.Election.setProvider(App.web3Provider);
+      App.listenForEvents();
+
       return App.render();
       //folosim un json pentru a incarca smart contract-ul, 
+    });
+  },
+
+  listenForEvents: function() {
+    App.contracts.Election.deployed().then(function(instance){
+      //solidity ofera posibilitatea de a pasa unui eveniment, filtre ca arugmente intre {}
+      instance.votedEvent({}, {
+        fromBlock: 0,
+        toBlock: 'latest'
+      }).watch(function(error,event){
+        console.log("event triggered", event)
+        App.render();
+      });
     });
   },
 
